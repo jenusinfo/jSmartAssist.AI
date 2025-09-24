@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.Build.NoTargets/3.7.0">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <NpmWorkingDir>$(MSBuildProjectDirectory)</NpmWorkingDir>
+
+    <!-- Tell VS how to start the UI -->
+    <StartAction>Program</StartAction>
+    <StartProgram>cmd.exe</StartProgram>
+    <StartArguments>/c npm run dev</StartArguments>
+    <WorkingDirectory>$(MSBuildProjectDirectory)</WorkingDirectory>
+  </PropertyGroup>
+
+  <!-- Run npm build when building -->
+  <Target Name="NpmBuild" AfterTargets="Build">
+    <Message Text="Running npm run build" Importance="high" />
+    <Exec WorkingDirectory="$(NpmWorkingDir)" Command="npm run build" />
+  </Target>
+
+  <ItemGroup>
+    <None Include="**\*" Exclude="node_modules\**;dist\**" />
+  </ItemGroup>
+</Project>

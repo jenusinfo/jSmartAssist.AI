@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jSmartAssist.AI.API", "jSmartAssist.AI.API\jSmartAssist.AI.API.csproj", "{3A95C60B-681C-48B6-B761-BF7728E02265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jSmartAssist.AI.UI", "jSmartAssist.AI.UI\jSmartAssist.AI.UI.csproj", "{CFF6DD45-1038-449B-B3AC-9D3930D70D34}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFF6DD45-1038-449B-B3AC-9D3930D70D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFF6DD45-1038-449B-B3AC-9D3930D70D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFF6DD45-1038-449B-B3AC-9D3930D70D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFF6DD45-1038-449B-B3AC-9D3930D70D34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A95C60B-681C-48B6-B761-BF7728E02265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A95C60B-681C-48B6-B761-BF7728E02265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A95C60B-681C-48B6-B761-BF7728E02265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A95C60B-681C-48B6-B761-BF7728E02265}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {834FAF65-8AA5-4EF8-8D2D-EBA10C13798E}
+	EndGlobalSection
+EndGlobal

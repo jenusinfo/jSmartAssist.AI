@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "jSmartAssist.AI.UI": {
+      "commandName": "Executable",
+      "executablePath": "cmd.exe",
+      "workingDirectory": "$(ProjectDir)",
+      "commandLineArgs": "/c npm run dev",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5173"
+    }
+  }
+}
