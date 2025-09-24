@@ -15,6 +15,7 @@ builder.Services.AddScoped<IAIService, AIService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IFileProcessingService, FileProcessingService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpClient<IAIService, AIService>();
 
 // *** CORS CONFIGURATION ***
 builder.Services.AddCors(options =>

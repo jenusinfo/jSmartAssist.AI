@@ -4,8 +4,12 @@ namespace jSmartAssist.AI.API.Models
     {
         public int Id { get; set; }
         public int DocumentId { get; set; }
-        public string Text { get; set; } = string.Empty;
-        public string EmbeddingVector { get; set; } = string.Empty; // JSON serialized vector
-        public Document Document { get; set; } = default!;
+        public int ChunkIndex { get; set; }
+        public string Text { get; set; }
+        public string EmbeddingVector { get; set; } // JSON serialized float array
+        public DateTime CreatedAt { get; set; }
+
+        // Navigation property
+        public virtual Document Document { get; set; }
     }
 }

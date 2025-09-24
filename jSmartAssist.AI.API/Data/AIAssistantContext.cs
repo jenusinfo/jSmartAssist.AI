@@ -13,6 +13,7 @@ namespace jSmartAssist.AI.API.Data
         public DbSet<Document> Documents { get; set; }
         public DbSet<DocumentChunk> DocumentChunks { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<ChatHistory> ChatHistories { get; set; }
         public DbSet<ChatSession> ChatSessions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
