@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using jSmartAssist.AI.API.Data;
 
@@ -11,9 +12,11 @@ using jSmartAssist.AI.API.Data;
 namespace jSmartAssist.AI.API.Migrations
 {
     [DbContext(typeof(AIAssistantContext))]
-    partial class AIAssistantContextModelSnapshot : ModelSnapshot
+    [Migration("20250924144757_ReseedUsers")]
+    partial class ReseedUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

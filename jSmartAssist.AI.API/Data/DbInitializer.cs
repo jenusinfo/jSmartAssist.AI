@@ -1,35 +1,45 @@
-using System.Linq;
 using jSmartAssist.AI.API.Models;
-using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace jSmartAssist.AI.API.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(AIAssistantContext context)
+        private static string HashPassword(string password)
         {
-            if (context.Users.Any())
+            return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(password)));
+        }
+
+        public static void Seed(AIAssistantContext context)
+        {
+            // Ensure DB exists
+            context.Database.EnsureCreated();
+
+            // Admin user
+            if (!context.Users.Any(u => u.Username == "admin"))
             {
-                return;   // DB has been seeded
+                context.Users.Add(new User
+                {
+                    Username = "admin",
+                    Email = "admin@jsmartassist.com",
+                    PasswordHash = HashPassword("Admin123!"),
+                    Role = "Admin"
+                });
             }
 
-            var hasher = new PasswordHasher<User>();
-
-            var admin = new User
+            // Regular user
+            if (!context.Users.Any(u => u.Username == "user"))
             {
-                Username = "admin",
-                Role = "Admin",
-                PasswordHash = hasher.HashPassword(null!, "Admin@123")
-            };
+                context.Users.Add(new User
+                {
+                    Username = "user",
+                    Email = "user@jsmartassist.com",
+                    PasswordHash = HashPassword("User123#"),
+                    Role = "User"
+                });
+            }
 
-            var user = new User
-            {
-                Username = "user",
-                Role = "User",
-                PasswordHash = hasher.HashPassword(null!, "User@123")
-            };
-
-            context.Users.AddRange(admin, user);
             context.SaveChanges();
         }
     }

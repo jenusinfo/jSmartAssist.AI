@@ -52,6 +52,12 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AIAssistantContext>();
+    DbInitializer.Seed(context);
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

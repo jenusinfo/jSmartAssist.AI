@@ -26,8 +26,8 @@ namespace jSmartAssist.AI.API.Data
             }
 
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Username = "admin", Email = "admin@jsmartassist.com", PasswordHash = HashPassword("Admin123!"), Role = "Admin" },
-                new User { Id = 2, Username = "user", PasswordHash = HashPassword("User123#"), Role = "User" }
+                new User { Id = 1, Username = "admin", Email = "admin@jassist.com", PasswordHash = HashPassword("Admin123!"), Role = "Admin" },
+                new User { Id = 2, Username = "user", Email = "user@jassist.com", PasswordHash = HashPassword("User123#"), Role = "User" }
             );
         }
     }
