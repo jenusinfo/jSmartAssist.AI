@@ -21,9 +21,18 @@ const LoginPage = () => {
       });
       if (!response.ok) throw new Error("Login failed");
       const data = await response.json();
-        login(data.accessToken);
-        localStorage.setItem("authToken", data.accessToken);  
-        localStorage.setItem("refreshToken", data.refreshToken);
+      const accessToken = data.accessToken ?? data.token?.accessToken ?? data.token;
+      const refreshToken = data.refreshToken ?? data.token?.refreshToken;
+
+        if (!accessToken || typeof accessToken !== "string") {
+            throw new Error("Missing access token in login response");
+        }
+
+        login(accessToken);
+
+        if (refreshToken && typeof refreshToken === "string") {
+            localStorage.setItem("refreshToken", refreshToken);
+        }
 
       window.location.href = "/dashboard";
     } catch (err) {
