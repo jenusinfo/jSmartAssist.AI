@@ -15,14 +15,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [role, setRole] = useState<string | null>(null);
 
   const login = (newToken: string) => {
-    localStorage.setItem("token", newToken);
-    setToken(newToken);
-    try {
-      const payload = JSON.parse(atob(newToken.split(".")[1]));
-      setRole(payload.role || null);
-    } catch {
-      setRole(null);
-    }
+    localStorage.setItem("authToken", newToken);
+      setToken(newToken);
+
+      try {
+          const payload = JSON.parse(atob(newToken.split(".")[1]));
+          setRole(payload.role || null);
+      } catch {
+          setRole(null);
+      }
   };
 
   const logout = () => {

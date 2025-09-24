@@ -21,8 +21,10 @@ const LoginPage = () => {
       });
       if (!response.ok) throw new Error("Login failed");
       const data = await response.json();
-      login(data.token);
-      localStorage.setItem("refreshToken", data.refreshToken);
+        login(data.accessToken);
+        localStorage.setItem("authToken", data.accessToken);  
+        localStorage.setItem("refreshToken", data.refreshToken);
+
       window.location.href = "/dashboard";
     } catch (err) {
       alert("Invalid credentials");

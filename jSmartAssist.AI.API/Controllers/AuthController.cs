@@ -28,13 +28,17 @@ namespace jSmartAssist.AI.API.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var token = await _authService.AuthenticateUserAsync(request.Username, request.Password);
-            if (token == null)
-                return Unauthorized(new { message = "Invalid credentials" });
+            var result = await _authService.AuthenticateUserAsync(request.Username, request.Password);
+            if (result == null) return Unauthorized(new { message = "Invalid credentials" });
 
-            return Ok(new { token });
+            return Ok(new
+            {
+                accessToken = result.Value.accessToken,
+                refreshToken = result.Value.refreshToken
+            });
         }
 
         [HttpPost("refresh")]
