@@ -13,28 +13,25 @@ namespace jSmartAssist.AI.API.Data
 
         public static void Seed(AIAssistantContext context)
         {
-            // Ensure DB exists
             context.Database.EnsureCreated();
 
-            // Admin user
             if (!context.Users.Any(u => u.Username == "admin"))
             {
                 context.Users.Add(new User
                 {
                     Username = "admin",
-                    Email = "admin@jsmartassist.com",
+                    Email = "admin@jassist.com",
                     PasswordHash = HashPassword("Admin123!"),
                     Role = "Admin"
                 });
             }
 
-            // Regular user
             if (!context.Users.Any(u => u.Username == "user"))
             {
                 context.Users.Add(new User
                 {
                     Username = "user",
-                    Email = "user@jsmartassist.com",
+                    Email = "user@jassist.com",
                     PasswordHash = HashPassword("User123#"),
                     Role = "User"
                 });

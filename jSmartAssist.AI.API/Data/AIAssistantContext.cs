@@ -25,10 +25,6 @@ namespace jSmartAssist.AI.API.Data
                 return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(password)));
             }
 
-            modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Username = "admin", Email = "admin@jassist.com", PasswordHash = HashPassword("Admin123!"), Role = "Admin" },
-                new User { Id = 2, Username = "user", Email = "user@jassist.com", PasswordHash = HashPassword("User123#"), Role = "User" }
-            );
         }
     }
 }

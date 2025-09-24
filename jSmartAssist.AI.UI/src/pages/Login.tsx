@@ -10,36 +10,36 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = async () => {
-    // Handle login logic here
-    try {
-      const response = await fetch("https://localhost:5001/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        // backend accepts both username or email
-        body: JSON.stringify({ username: email, password })
-      });
-      if (!response.ok) throw new Error("Login failed");
-      const data = await response.json();
-      const accessToken = data.accessToken ?? data.token?.accessToken ?? data.token;
-      const refreshToken = data.refreshToken ?? data.token?.refreshToken;
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch("http://localhost:5246/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username: email, password })
+            });
+            if (!response.ok) throw new Error("Login failed");
 
-        if (!accessToken || typeof accessToken !== "string") {
-            throw new Error("Missing access token in login response");
+            const data = await response.json();
+
+            // Expect flat structure: { accessToken, refreshToken }
+            if (!data.accessToken || typeof data.accessToken !== "string") {
+                throw new Error("Missing access token in login response");
+            }
+
+            login(data.accessToken);
+
+            localStorage.setItem("authToken", data.accessToken);
+            if (data.refreshToken) {
+                localStorage.setItem("refreshToken", data.refreshToken);
+            }
+
+            window.location.href = "/dashboard";
+        } catch (err) {
+            alert("Invalid credentials");
+            console.error(err);
         }
+    };
 
-        login(accessToken);
-
-        if (refreshToken && typeof refreshToken === "string") {
-            localStorage.setItem("refreshToken", refreshToken);
-        }
-
-      window.location.href = "/dashboard";
-    } catch (err) {
-      alert("Invalid credentials");
-      console.error(err);
-    }
-  };
 
   return (
     <div className="min-h-screen flex">
