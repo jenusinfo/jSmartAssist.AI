@@ -1,4 +1,5 @@
-using jSmartAssist.AI.API.Models;
+﻿using jSmartAssist.AI.API.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -13,14 +14,15 @@ namespace jSmartAssist.AI.API.Data
 
         public static void Seed(AIAssistantContext context)
         {
-            context.Database.EnsureCreated();
+            // Use migrations, not EnsureCreated
+            context.Database.Migrate();
 
             if (!context.Users.Any(u => u.Username == "admin"))
             {
                 context.Users.Add(new User
                 {
                     Username = "admin",
-                    Email = "admin@jassist.com",
+                    Email = "admin@jsmartassist.com", //  
                     PasswordHash = HashPassword("Admin123!"),
                     Role = "Admin"
                 });
@@ -31,7 +33,7 @@ namespace jSmartAssist.AI.API.Data
                 context.Users.Add(new User
                 {
                     Username = "user",
-                    Email = "user@jassist.com",
+                    Email = "user@jsmartassist.com", //  
                     PasswordHash = HashPassword("User123#"),
                     Role = "User"
                 });

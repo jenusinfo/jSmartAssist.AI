@@ -13,19 +13,38 @@ namespace jSmartAssist.AI.API.Services
     {
         private readonly IConfiguration _config;
         private readonly AIAssistantContext _context;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(IConfiguration config, AIAssistantContext context)
+        public AuthService(IConfiguration config, AIAssistantContext context, ILogger<AuthService> logger)
         {
             _config = config;
             _context = context;
+            _logger = logger;
         }
 
         public async Task<(string accessToken, string refreshToken)?> AuthenticateUserAsync(string username, string password)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == username || u.Email == username);
-            if (user == null) return null;
+            _logger.LogInformation($"Login attempt for username/email: {username}");
 
-            if (!VerifyPassword(password, user.PasswordHash)) return null;
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == username || u.Email == username);
+
+            if (user == null)
+            {
+                _logger.LogWarning($"User not found for: {username}");
+                return null;
+            }
+
+            _logger.LogInformation($"User found: {user.Username}, Email: {user.Email}");
+
+            if (!VerifyPassword(password, user.PasswordHash))
+            {
+                _logger.LogWarning($"Password verification failed for user: {user.Username}");
+                _logger.LogDebug($"Expected hash: {user.PasswordHash}");
+                _logger.LogDebug($"Provided password hash: {Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(password)))}");
+                return null;
+            }
+
+            _logger.LogInformation($"Login successful for user: {user.Username}");
 
             var accessToken = GenerateJwtToken(user);
             var refreshToken = GenerateRefreshToken(user);

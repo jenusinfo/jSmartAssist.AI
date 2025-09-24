@@ -15,6 +15,7 @@ namespace jSmartAssist.AI.API.Controllers
     {
         private readonly IAuthService _authService;
         private readonly AIAssistantContext _context;
+
         public AuthController(IAuthService authService, AIAssistantContext context)
         {
             _authService = authService;
@@ -32,7 +33,8 @@ namespace jSmartAssist.AI.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var result = await _authService.AuthenticateUserAsync(request.Username, request.Password);
-            if (result == null) return Unauthorized(new { message = "Invalid credentials" });
+            if (result == null)
+                return Unauthorized(new { message = "Invalid credentials" });
 
             return Ok(new
             {
@@ -56,5 +58,24 @@ namespace jSmartAssist.AI.API.Controllers
             return Ok(new { token = newAccessToken });
         }
 
+        [HttpGet("test-users")]
+        [AllowAnonymous]
+        public async Task<IActionResult> TestUsers()
+        {
+            var users = await _context.Users.Select(u => new
+            {
+                u.Username,
+                u.Email,
+                u.Role,
+                PasswordLength = u.PasswordHash.Length
+            }).ToListAsync();
+
+            return Ok(new
+            {
+                users = users,
+                totalCount = users.Count,
+                message = "These are the users in your database"
+            });
+        }
     }
 }
