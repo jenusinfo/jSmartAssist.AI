@@ -11,15 +11,42 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
 
     const handleSubmit = async () => {
+        console.log('Attempting login with:', { username: email, password: '***' });
+
         try {
+            const loginData = {
+                username: email,  // Note: using email field for username
+                password: password
+            };
+
+            console.log('Sending request to:', 'http://localhost:5246/api/auth/login');
+
             const response = await fetch("http://localhost:5246/api/auth/login", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username: email, password })
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(loginData)
             });
-            if (!response.ok) throw new Error("Login failed");
 
-            const data = await response.json();
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+
+            const responseText = await response.text();
+            console.log('Response text:', responseText);
+
+            if (!response.ok) {
+                // Try to parse as JSON, but handle if it's not JSON
+                try {
+                    const errorData = JSON.parse(responseText);
+                    throw new Error(errorData.message || `Login failed: ${response.status}`);
+                } catch (e) {
+                    throw new Error(`Login failed: ${response.status} - ${responseText}`);
+                }
+            }
+
+            const data = JSON.parse(responseText);
+            console.log('Login successful, received:', data);
 
             // Expect flat structure: { accessToken, refreshToken }
             if (!data.accessToken || typeof data.accessToken !== "string") {
@@ -35,11 +62,14 @@ const LoginPage = () => {
 
             window.location.href = "/dashboard";
         } catch (err) {
-            alert("Invalid credentials");
-            console.error(err);
+            console.error('Login error:', err);
+            if (err.message.includes('Failed to fetch')) {
+                alert("Cannot connect to server. Check if:\n1. API is running on port 5246\n2. CORS is enabled in the API");
+            } else {
+                alert(err.message || "Invalid credentials");
+            }
         }
     };
-
 
   return (
     <div className="min-h-screen flex">

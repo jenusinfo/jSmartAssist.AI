@@ -43,21 +43,6 @@ namespace jSmartAssist.AI.API.Controllers
             });
         }
 
-        [HttpPost("refresh")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Refresh([FromBody] string refreshToken)
-        {
-            var storedToken = await _context.RefreshTokens
-                .Include(r => r.User)
-                .SingleOrDefaultAsync(r => r.Token == refreshToken && !r.IsRevoked);
-
-            if (storedToken == null || storedToken.Expires < DateTime.UtcNow)
-                return Unauthorized(new { message = "Invalid refresh token" });
-
-            var newAccessToken = _authService.GenerateJwtToken(storedToken.User);
-            return Ok(new { token = newAccessToken });
-        }
-
         [HttpGet("test-users")]
         [AllowAnonymous]
         public async Task<IActionResult> TestUsers()
@@ -76,6 +61,21 @@ namespace jSmartAssist.AI.API.Controllers
                 totalCount = users.Count,
                 message = "These are the users in your database"
             });
+        }
+
+        [HttpPost("refresh")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Refresh([FromBody] string refreshToken)
+        {
+            var storedToken = await _context.RefreshTokens
+                .Include(r => r.User)
+                .SingleOrDefaultAsync(r => r.Token == refreshToken && !r.Revoked);  // Changed from IsRevoked to Revoked
+
+            if (storedToken == null || storedToken.Expires < DateTime.UtcNow)
+                return Unauthorized(new { message = "Invalid refresh token" });
+
+            var newAccessToken = _authService.GenerateJwtToken(storedToken.User);
+            return Ok(new { token = newAccessToken });
         }
     }
 }

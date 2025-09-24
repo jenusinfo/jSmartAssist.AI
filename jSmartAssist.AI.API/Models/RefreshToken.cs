@@ -12,7 +12,8 @@ namespace jSmartAssist.AI.API.Models
 
         public DateTime Expires { get; set; }
 
-        public bool IsRevoked { get; set; } = false;
+        // Using "Revoked" to match the existing database column
+        public bool Revoked { get; set; } = false;
 
         // Foreign key
         public int UserId { get; set; }
