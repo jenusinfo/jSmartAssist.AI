@@ -1,6 +1,14 @@
 ﻿using jSmartAssist.AI.API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
+using System;   
+using System.Linq;
+using System.Collections.Generic;   
+using System.Threading.Tasks;
+using System.IO;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Security.Claims;   
+using Microsoft.IdentityModel.Tokens;   
 using System.Text;
 
 namespace jSmartAssist.AI.API.Data

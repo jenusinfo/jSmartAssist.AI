@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using jSmartAssist.AI.API.Services;
 using jSmartAssist.AI.API.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;  
+using System.Collections.Generic;
+using jSmartAssist.AI.API.Models;   
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System;
 

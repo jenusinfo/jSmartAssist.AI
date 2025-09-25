@@ -4,7 +4,7 @@ namespace jSmartAssist.AI.API.DTOs
     {
         public string Response { get; set; }
         public List<string> References { get; set; }
-        public List<DocumentReferenceDto> ReferencedDocuments { get; set; }
+        public List<DocumentDto> Documents { get; set; }
         public int TokensUsed { get; set; }
     }
 }
