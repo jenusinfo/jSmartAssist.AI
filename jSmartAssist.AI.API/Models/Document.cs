@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace jSmartAssist.AI.API.Models
 {
-    public class Document
+    public class DocumentReference
     {
         public int Id { get; set; }
 

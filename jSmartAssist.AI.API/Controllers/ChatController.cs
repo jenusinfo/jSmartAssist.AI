@@ -1,7 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using jSmartAssist.AI.API.DTOs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using jSmartAssist.AI.API.Data;
+using jSmartAssist.AI.API.Models;
 using jSmartAssist.AI.API.Services;
+using jSmartAssist.AI.API.DTOs;
 
 namespace jSmartAssist.AI.API.Controllers
 {
@@ -10,24 +13,71 @@ namespace jSmartAssist.AI.API.Controllers
     [Authorize]
     public class ChatController : ControllerBase
     {
-        private readonly IChatService _chatService;
-        public ChatController(IChatService chatService)
+        private readonly AIAssistantContext _context;
+        private readonly IOllamaService _ollamaService;  // ADD THIS FIELD
+        private readonly ILogger<ChatController> _logger;
+
+        public ChatController(
+            AIAssistantContext context,
+            IOllamaService ollamaService,  // ADD THIS PARAMETER
+            ILogger<ChatController> logger)
         {
-            _chatService = chatService;
+            _context = context;
+            _ollamaService = ollamaService;  // ADD THIS ASSIGNMENT
+            _logger = logger;
+        }
+
+        // Test endpoint
+        [HttpGet("test-ollama")]
+        [AllowAnonymous]  // Temporary for testing
+        public async Task<IActionResult> TestOllama()
+        {
+            try
+            {
+                var response = await _ollamaService.GenerateResponseAsync("Say 'Hello, Ollama is working!' if you can hear me.");
+                return Ok(new { success = true, response });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { success = false, error = ex.Message });
+            }
         }
 
         [HttpPost("message")]
-        public async Task<IActionResult> SendMessage([FromBody] ChatRequestDto request)
+        public async Task<ActionResult<ChatResponseDto>> SendMessage([FromBody] ChatRequestDto request)
         {
-            var response = await _chatService.ProcessMessageAsync(request);
-            return Ok(response);
-        }
+            try
+            {
+                // For now, test without document context
+                var response = await _ollamaService.GenerateResponseAsync(request.Message);
 
-        [HttpGet("history/{sessionId}")]
-        public async Task<IActionResult> GetHistory(string sessionId)
-        {
-            var history = await _chatService.GetChatHistoryAsync(sessionId);
-            return Ok(history);
+                // Save to chat history
+                var chatHistory = new ChatHistory
+                {
+                    SessionId = request.SessionId,
+                    UserMessage = request.Message,
+                    AssistantResponse = response,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.ChatHistories.Add(chatHistory);
+                await _context.SaveChangesAsync();
+
+                return Ok(new ChatResponseDto
+                {
+                    Response = response,
+                    Documents = new List<DocumentReferenceDto>()
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing chat message");
+                return Ok(new ChatResponseDto
+                {
+                    Response = "I apologize, but I encountered an error. Please ensure the AI service is running.",
+                    Documents = new List<DocumentReferenceDto>()
+                });
+            }
         }
     }
 }

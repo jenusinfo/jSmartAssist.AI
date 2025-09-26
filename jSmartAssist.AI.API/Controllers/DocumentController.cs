@@ -41,7 +41,7 @@ namespace jSmartAssist.AI.API.Controllers
 
         // GET: api/document
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DocumentDto>>> GetDocuments()
+        public async Task<ActionResult<IEnumerable<DocumentReferenceDto>>> GetDocuments()
         {
             try
             {
@@ -49,7 +49,7 @@ namespace jSmartAssist.AI.API.Controllers
                     .Include(d => d.Category)
                     .Include(d => d.DocumentChunks)
                     .OrderByDescending(d => d.UploadedAt)
-                    .Select(d => new DocumentDto
+                    .Select(d => new DocumentReferenceDto
                     {
                         Id = d.Id,
                         Title = d.Title ?? d.FileName, // Fallback to FileName if Title is null
@@ -78,7 +78,7 @@ namespace jSmartAssist.AI.API.Controllers
 
         // GET: api/document/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DocumentDto>> GetDocument(int id)
+        public async Task<ActionResult<DocumentReferenceDto>> GetDocument(int id)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace jSmartAssist.AI.API.Controllers
                     return NotFound();
                 }
 
-                var documentDto = new DocumentDto
+                var documentDto = new DocumentReferenceDto
                 {
                     Id = document.Id,
                     Title = document.Title ?? document.FileName,
@@ -123,7 +123,7 @@ namespace jSmartAssist.AI.API.Controllers
         [HttpPost("upload")]
         [Authorize(Roles = "Admin")]
         [RequestFormLimits(MultipartBodyLengthLimit = 104857600)] // 100MB limit
-        public async Task<ActionResult<DocumentDto>> UploadDocument([FromForm] UploadDocumentDto uploadDto)
+        public async Task<ActionResult<DocumentReferenceDto>> UploadDocument([FromForm] UploadDocumentDto uploadDto)
         {
             try
             {
@@ -171,14 +171,18 @@ namespace jSmartAssist.AI.API.Controllers
                 var username = User.Identity?.Name ?? "Unknown";
 
                 // Create document record
-                var document = new Document
+                var document = new DocumentReference
                 {
                     Title = uploadDto.Title ?? Path.GetFileNameWithoutExtension(uploadDto.File.FileName),
-                    FileName = uploadDto.File.FileName,
-                    Description = uploadDto.Description,
+                    // Replace this line in UploadDocument method:
+                    // FilePath = uploadDto,
+
+                    // With this line:
+                    Description = uploadDto.Description ?? string.Empty,
                     CategoryId = uploadDto.CategoryId,
                     ContentType = uploadDto.File.ContentType,
                     FilePath = filePath,
+                    FileName = uploadDto.File.FileName,
                     FileSize = uploadDto.File.Length,
                     ProcessingStatus = "Pending",
                     UploadedAt = DateTime.UtcNow,
@@ -205,7 +209,7 @@ namespace jSmartAssist.AI.API.Controllers
                     }
                 });
 
-                var documentDto = new DocumentDto
+                var documentDto = new DocumentReferenceDto
                 {
                     Id = document.Id,
                     Title = document.Title,

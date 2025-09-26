@@ -28,6 +28,6 @@ namespace jSmartAssist.AI.API.Models
         public DateTime UpdatedAt { get; set; }
 
         // Navigation property
-        public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
+        public virtual ICollection<DocumentReference> Documents { get; set; } = new List<DocumentReference>();
     }
 }

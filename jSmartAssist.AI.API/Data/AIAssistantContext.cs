@@ -12,7 +12,7 @@ namespace jSmartAssist.AI.API.Data
 
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Document> Documents { get; set; }
+        public DbSet<DocumentReference> Documents { get; set; }
         public DbSet<DocumentChunk> DocumentChunks { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
@@ -36,7 +36,7 @@ namespace jSmartAssist.AI.API.Data
             });
 
             // Document configuration
-            modelBuilder.Entity<Document>(entity =>
+            modelBuilder.Entity<DocumentReference>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Title).IsRequired().HasMaxLength(200);

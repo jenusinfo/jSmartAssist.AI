@@ -15,7 +15,12 @@ builder.Services.AddScoped<IAIService, AIService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IFileProcessingService, FileProcessingService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddHttpClient<IAIService, AIService>();
+
+// Register Ollama service with HttpClient
+builder.Services.AddHttpClient<IOllamaService, OllamaService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(120);
+});
 
 // *** CORS CONFIGURATION ***
 builder.Services.AddCors(options =>

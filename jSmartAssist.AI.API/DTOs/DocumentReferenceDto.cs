@@ -1,13 +1,9 @@
-﻿namespace jSmartAssist.AI.API.DTOs
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace jSmartAssist.AI.API.DTOs
 {
-    //public class DocumentReferenceDto
-    //{
-    //    public int Id { get; set; }
-    //    public string Title { get; set; }
-    //    public string FileName { get; set; }
-    //    public string Category { get; set; }
-    //}
-    public class DocumentDto
+
+    public class DocumentReferenceDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -25,11 +21,18 @@
         public string UploadedBy { get; set; }
     }
 
-    public class UploadDocumentDto
+     public class UploadDocumentDto
     {
+        [FromForm(Name = "file")]
         public IFormFile File { get; set; }
+
+        [FromForm(Name = "title")]
         public string Title { get; set; }
-        public string Description { get; set; }
+
+        [FromForm(Name = "description")]
+        public string? Description { get; set; }
+
+        [FromForm(Name = "categoryId")]
         public int? CategoryId { get; set; }
     }
 

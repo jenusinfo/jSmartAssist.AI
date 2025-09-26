@@ -10,6 +10,6 @@ namespace jSmartAssist.AI.API.Models
         public DateTime CreatedAt { get; set; }
 
         // Navigation property
-        public virtual Document Document { get; set; }
+        public virtual DocumentReference Document { get; set; }
     }
 }

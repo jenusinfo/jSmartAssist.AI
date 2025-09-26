@@ -35,6 +35,8 @@ namespace jSmartAssist.AI.API.Controllers
             {
                 var categories = await _context.Categories
                     .Include(c => c.Documents)
+                    .OrderBy(c => c.DisplayOrder ?? 999)  // Order HERE on Category entity
+                    .ThenBy(c => c.Name)
                     .Select(c => new CategoryDto
                     {
                         Id = c.Id,
@@ -47,8 +49,6 @@ namespace jSmartAssist.AI.API.Controllers
                         CreatedAt = c.CreatedAt,
                         UpdatedAt = c.UpdatedAt
                     })
-                    .OrderBy(c => c.DisplayOrder ?? 999)
-                    .ThenBy(c => c.Name)
                     .ToListAsync();
 
                 return Ok(categories);
